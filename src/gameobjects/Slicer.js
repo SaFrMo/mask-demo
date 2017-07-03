@@ -15,6 +15,8 @@ export default class extends Phaser.Sprite {
 		this.tip = opts.tip || new Phaser.Point(0, 0)
 		this.direction = opts.direction || directions.EAST
 		this.speed = opts.speed || 10
+		this.currentSpeed = this.speed
+		this.dps = opts.dps || 10
 
 		this.addLine(this.direction)
 	}
@@ -63,11 +65,20 @@ export default class extends Phaser.Sprite {
 		return this.lines[this.lines.length - 1]
 	}
 
+	onIntersectingSquare (square) {
+		if (square.health > 0) {
+			this.currentSpeed = 0
+			square.damage(this.game.time.physicsElapsed * this.dps)
+		} else {
+			this.currentSpeed = this.speed
+		}
+	}
+
 	update () {
 		super.update()
 
         // get new tip position and apply to active line
-		const delta = this.game.time.physicsElapsed * this.speed
+		const delta = this.game.time.physicsElapsed * this.currentSpeed
 		if (this.direction === directions.NORTH || this.direction === directions.SOUTH) {
 			this.tip.y += delta * (this.direction === directions.NORTH ? -1 : 1)
 			this.lastLine().height = this.tip.y - this.lastLine().y

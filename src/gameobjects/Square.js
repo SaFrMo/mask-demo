@@ -9,4 +9,12 @@ export default class extends Phaser.Sprite {
 		this.maxHealth = this.health = opts.health || 10
 		this.occupied = false
 	}
+
+	kill () {
+
+	}
+
+	onIntersectingSlicer (slicer) {
+
+	}
 }

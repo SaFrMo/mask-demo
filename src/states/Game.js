@@ -11,29 +11,10 @@ export default class extends Phaser.State {
 	init () {}
 	preload () {}
 
-	center () {
-		return new Phaser.Point(this.game.world.centerX, this.game.world.centerY)
-	}
-
-	gridSide () {
-		return squareSize * gridSize
-	}
-
-	gridCenter () {
-		const center = this.center()
-		const gridSideHalf = this.gridSide() / 2
-		return new Phaser.Point(center.x - gridSideHalf, center.y - gridSideHalf)
-	}
-
-    // gets world coordinates of a given grid square
-    // zero-based, counting from top left
-	squareCoord (x, y) {
-		const topLeft = this.gridCenter()
-		const squareHalf = squareSize / 2
-		return topLeft.add(x * squareSize + squareHalf, y * squareSize + squareHalf)
-	}
-
 	create () {
+        // store slicers
+		this.slicers = []
+
         // create grid
 		this.grid = this.game.add.sprite(this.gridCenter().x, this.gridCenter().y, '')
 		this.grid.anchor.set(0.5, 0.5)
@@ -59,8 +40,9 @@ export default class extends Phaser.State {
 			x: startPos.x,
 			y: startPos.y
 		}))
+		this.slicers.push(slicer)
 
-        // add key listener
+        // add key listeners
 		this.game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(() => {
 			slicer.addLine('n')
 		})
@@ -76,10 +58,41 @@ export default class extends Phaser.State {
 	}
 
 	render () {
-		if (__DEV__) {
-
-        // dev mode entry point!
-
+		super.update()
+		for (let slicer of this.slicers) {
+			for (let square of this.grid.children) {
+                // check slicers against squares
+				const slicerBounds = slicer.lastLine().getBounds()
+				const squareBounds = square.getBounds()
+				if (Phaser.Rectangle.intersects(slicerBounds, squareBounds)) {
+					slicer.onIntersectingSquare(square)
+					square.onIntersectingSlicer(slicer)
+				}
+			}
 		}
+	}
+
+    // Utility functions
+
+	center () {
+		return new Phaser.Point(this.game.world.centerX, this.game.world.centerY)
+	}
+
+	gridSide () {
+		return squareSize * gridSize
+	}
+
+	gridCenter () {
+		const center = this.center()
+		const gridSideHalf = this.gridSide() / 2
+		return new Phaser.Point(center.x - gridSideHalf, center.y - gridSideHalf)
+	}
+
+    // gets world coordinates of a given grid square
+    // zero-based, counting from top left
+	squareCoord (x, y) {
+		const topLeft = this.gridCenter()
+		const squareHalf = squareSize / 2
+		return topLeft.add(x * squareSize + squareHalf, y * squareSize + squareHalf)
 	}
 }
