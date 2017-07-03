@@ -58,7 +58,10 @@ export default class extends Phaser.State {
 	}
 
 	render () {
-		super.update()
+		for (let square of this.grid.children) {
+			square.update()
+		}
+
 		for (let slicer of this.slicers) {
 			for (let square of this.grid.children) {
                 // check slicers against squares
