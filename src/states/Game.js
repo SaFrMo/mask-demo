@@ -1,7 +1,6 @@
 import Phaser from 'phaser'
 import Square from '../gameobjects/Square.js'
 import Slicer from '../gameobjects/Slicer.js'
-import HealthBar from 'phaser-percent-bar'
 
 const squareSize = 30
 const squareMargin = 5
@@ -26,8 +25,7 @@ export default class extends Phaser.State {
 					game: this.game,
 					x: x * squareSize + squareMargin,
 					y: y * squareSize + squareMargin,
-					size: squareSize - squareMargin * 2,
-					margin: squareMargin
+					size: squareSize - squareMargin * 2
 				}))
 
 				this.grid.addChild(newSquare)

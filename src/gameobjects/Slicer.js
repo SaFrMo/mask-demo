@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import HealthBar from 'phaser-percent-bar'
 
 const directions = {
 	NORTH: 'n',
@@ -11,12 +12,35 @@ export default class extends Phaser.Sprite {
 	constructor (opts) {
 		super(opts.game, opts.x || 0, opts.y || 0, opts.key || 'white-square')
 		this.opts = opts
+
+        // Save line info
 		this.lines = opts.lines || []
 		this.tip = opts.tip || new Phaser.Point(0, 0)
 		this.direction = opts.direction || directions.EAST
+
+        // Speed info
 		this.speed = opts.speed || 10
 		this.currentSpeed = this.speed
+
+        // Combat info
 		this.dps = opts.dps || 10
+
+        // Health info
+		this.health = this.maxHealth = opts.health || 100
+
+		this.healthBar = this.game.add.existing(new HealthBar({
+			game: this.game,
+			host: this,
+			watch: {
+				host: this,
+				value: 'health',
+				max: this.maxHealth
+			},
+			width: 100
+
+		}))
+
+        // Health bar
 
 		this.addLine(this.direction)
 	}
