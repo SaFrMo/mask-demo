@@ -1,5 +1,6 @@
 import Phaser from 'phaser'
 import { centerGameObjects } from '../utils'
+import dataUris from 'data-uri-snippets'
 
 export default class extends Phaser.State {
   init () {}
@@ -14,6 +15,7 @@ export default class extends Phaser.State {
     // load your assets
     //
     // this.load.image('mushroom', 'assets/images/mushroom2.png')
+    this.load.image('white-square', dataUris.white1x1)
   }
 
   create () {
