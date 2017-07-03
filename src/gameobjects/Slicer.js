@@ -12,7 +12,6 @@ export default class extends Phaser.Sprite {
 		super(opts.game, opts.x || 0, opts.y || 0, opts.key || 'white-square')
 		this.opts = opts
 		this.lines = opts.lines || []
-		this.points = opts.points || []
 		this.tip = opts.tip || new Phaser.Point(0, 0)
 		this.direction = opts.direction || directions.EAST
 		this.speed = opts.speed || 10
@@ -21,18 +20,9 @@ export default class extends Phaser.Sprite {
 	}
 
 	addLine (newDirection = directions.EAST) {
-        // Save tip as endpoint of last line
-		// this.points.push(new Phaser.Point(this.tip.x, this.tip.y))
-
 		this.direction = newDirection
 
-		const newLine = this.addChild(this.game.add.existing(
-            new Phaser.Sprite(this.game,
-                              this.tip.x,
-                              this.tip.y,
-                              'white-square')
-            )
-        )
+		const newLine = this.addChild(this.game.make.sprite(this.tip.x, this.tip.y, 'white-square'))
 		newLine.tint = this.opts.tint || 0x00ff00
 		let width = 0
 		let height = 0
@@ -76,7 +66,7 @@ export default class extends Phaser.Sprite {
 	update () {
 		super.update()
 
-        // get new tip position
+        // get new tip position and apply to active line
 		const delta = this.game.time.physicsElapsed * this.speed
 		if (this.direction === directions.NORTH || this.direction === directions.SOUTH) {
 			this.tip.y += delta * (this.direction === directions.NORTH ? -1 : 1)
@@ -85,7 +75,5 @@ export default class extends Phaser.Sprite {
 			this.tip.x += delta * (this.direction === directions.WEST ? -1 : 1)
 			this.lastLine().width = this.tip.x - this.lastLine().x
 		}
-
-		console.log(this.lines[0] === this.lastLine())
 	}
 }
