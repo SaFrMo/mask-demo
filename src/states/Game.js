@@ -1,10 +1,10 @@
-/* globals __DEV__ */
 import Phaser from 'phaser'
 import Square from '../gameobjects/Square.js'
 import Slicer from '../gameobjects/Slicer.js'
+import HealthBar from 'phaser-percent-bar'
 
 const squareSize = 30
-const squareMargin = 3
+const squareMargin = 5
 const gridSize = 4
 
 export default class extends Phaser.State {
@@ -26,7 +26,8 @@ export default class extends Phaser.State {
 					game: this.game,
 					x: x * squareSize + squareMargin,
 					y: y * squareSize + squareMargin,
-					size: squareSize - squareMargin * 2
+					size: squareSize - squareMargin * 2,
+					margin: squareMargin
 				}))
 
 				this.grid.addChild(newSquare)
@@ -66,7 +67,7 @@ export default class extends Phaser.State {
 			for (let square of this.grid.children) {
                 // check slicers against squares
 				const slicerBounds = slicer.lastLine().getBounds()
-				const squareBounds = square.getBounds()
+				const squareBounds = square.square.getBounds()
 				if (Phaser.Rectangle.intersects(slicerBounds, squareBounds)) {
 					slicer.onIntersectingSquare(square)
 					square.onIntersectingSlicer(slicer)
