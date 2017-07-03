@@ -19,6 +19,20 @@ export default class extends Phaser.State {
 			x: 20,
 			y: 20
 		}))
+
+        // add key listener
+		this.game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(() => {
+			slicer.addLine('n')
+		})
+		this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN).onDown.add(() => {
+			slicer.addLine('s')
+		})
+		this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT).onDown.add(() => {
+			slicer.addLine('e')
+		})
+		this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT).onDown.add(() => {
+			slicer.addLine('w')
+		})
 	}
 
 	render () {

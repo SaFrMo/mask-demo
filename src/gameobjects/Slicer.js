@@ -24,35 +24,45 @@ export default class extends Phaser.Sprite {
         // Save tip as endpoint of last line
 		// this.points.push(new Phaser.Point(this.tip.x, this.tip.y))
 
-		const newLine = this.addChild(
+		this.direction = newDirection
+
+		const newLine = this.addChild(this.game.add.existing(
             new Phaser.Sprite(this.game,
-                              0,
-                              0,
+                              this.tip.x,
+                              this.tip.y,
                               'white-square')
+            )
         )
 		newLine.tint = this.opts.tint || 0x00ff00
 		let width = 0
 		let height = 0
+		let anchorX = 0
+		let anchorY = 0
 
 		switch (true) {
 		case newDirection === directions.NORTH:
+			anchorX = 0.5
 			width = 5
 			height = 0
 			break
 		case newDirection === directions.SOUTH:
+			anchorX = 0.5
 			width = 5
 			height = 0
 			break
 		case newDirection === directions.WEST:
+			anchorY = 0.5
 			width = 0
 			height = 5
 			break
 		default:
+			anchorY = 0.5
 			width = 0
 			height = 5
 			break
 		}
 
+		newLine.anchor.setTo(anchorX, anchorY)
 		newLine.width = width
 		newLine.height = height
 
@@ -75,5 +85,7 @@ export default class extends Phaser.Sprite {
 			this.tip.x += delta * (this.direction === directions.WEST ? -1 : 1)
 			this.lastLine().width = this.tip.x - this.lastLine().x
 		}
+
+		console.log(this.lines[0] === this.lastLine())
 	}
 }
