@@ -21,15 +21,11 @@ export default class extends Phaser.Sprite {
 			host: this,
 			height: barHeight,
 			width: this.square.width,
-			watch: {
-				host: this,
-				value: 'health',
-				max: this.maxHealth
-			},
 			xOffset: -6,
 			yOffset: 0
 		}))
-		this.healthBar.x -= 10
+
+		this.healthBar.hide()
 	}
 
 	kill () {
@@ -37,7 +33,7 @@ export default class extends Phaser.Sprite {
 	}
 
 	onIntersectingSlicer (slicer) {
-
+		this.healthBar.show()
 	}
 
 	update () {
